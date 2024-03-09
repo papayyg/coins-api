@@ -16,20 +16,6 @@ const userSchema = new mongoose.Schema({
 		required: true,
 		trim: true,
 	},
-	surname: {
-		type: String,
-		required: true,
-		trim: true,
-	},
-	age: {
-		type: Number,
-		required: true,
-	},
-	address: {
-		type: String,
-		required: true,
-		trim: true,
-	}
 });
 
 const User = mongoose.model('User', userSchema);

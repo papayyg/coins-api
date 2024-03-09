@@ -6,6 +6,7 @@ exports.createUser = async (userData) => {
     const user = new User({
         login: userData.login,
         password: hashedPassword,
+		name: userData.name
     });
     return await user.save();
 };
