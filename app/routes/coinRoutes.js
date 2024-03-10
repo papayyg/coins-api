@@ -4,10 +4,11 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.get('/categories', coinController.getCategories);
-router.get('/category/:id', coinController.getCategory);
-router.post('/category', authMiddleware.authenticateToken, coinController.addCategory);
-router.delete('/category/:id', authMiddleware.authenticateToken, coinController.deleteCategory);
-router.put('/category/:id', authMiddleware.authenticateToken, coinController.editCategory);
+router.get('/', coinController.getCategories);
+router.get('/list', coinController.getCoinsByFilter);
+router.get('/:id', coinController.getCoin);
+router.post('/', authMiddleware.authenticateToken, coinController.addCoin);
+router.put('/:id', authMiddleware.authenticateToken, coinController.editCoin);
+router.delete('/:id', authMiddleware.authenticateToken, coinController.deleteCoin);
 
 module.exports = router;

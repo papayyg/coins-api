@@ -6,5 +6,5 @@ exports.generateToken = (user) => {
         userId: user._id,
         login: user.login,
     };
-    return jwt.sign(payload, config.secretKey, { expiresIn: '1h' });
+    return jwt.sign(payload, config.secretKey, { expiresIn: '24h' });
 };
