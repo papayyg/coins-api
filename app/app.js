@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const morgan = require('morgan');
-const config = require('../config/config');
+const morgan = require("morgan");
+const config = require("../config/config");
 
 const authRoutes = require("./routes/authRoutes");
 const coinRoutes = require("./routes/coinRoutes");
@@ -10,7 +10,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms"));
 
 mongoose
     .connect(config.databaseURL)

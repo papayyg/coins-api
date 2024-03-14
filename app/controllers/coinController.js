@@ -23,6 +23,8 @@ const getCategories = async (req, res) => {
 const getCoinsByFilter = async (req, res) => {
     try {
         let filter = {};
+		let offset = parseInt(req.query.offset) || 0;
+        let limit = parseInt(req.query.limit) || 10;
 
         if (req.query.category) filter.category = req.query.category;
 
@@ -51,8 +53,8 @@ const getCoinsByFilter = async (req, res) => {
                 }
             });
         }
-		console.log(filter)
-        const coins = await Coin.find(filter);
+        const coins = await Coin.find(filter).skip(offset).limit(limit);
+		
         res.json(coins);
     } catch (err) {
         console.error(err);

@@ -1,0 +1,361 @@
+openapi: 3.0.0
+info:
+  title: Coins API
+  description: |
+    Coins API provides the ability to work with a collection of coins. You can get information about different coins, add new coins to the database, and also search by category and filter coins based on various criteria. Some requests require admin authorization.
+  version: 1.0.0
+  contact:
+    name: papayyg
+    email: aslan.mamedrzaev@gmail.com
+    url: https://github.com/papayyg
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+tags:
+  - name: Coin
+    description: Endpoints related to coin management.
+  - name: Authentication
+    description: User authentication endpoints.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    CoinSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Coin name
+          example: "The British Antelope"
+        category:
+          type: string
+          description: Coin category
+          example: "Bullion coins"
+        denomination:
+          type: string
+          description: Coin denomination
+          example: "1/2 pound"
+        shortDescription:
+          type: string
+          description: Brief description of the coin
+          example: "Unique coin depicting an antelope. British South African gold coin with a face value of 1/2 pound. It has been produced since 1952."
+        detailedDescription:
+          type: string
+          description: Detailed description of the coin
+          example: "Unique coin depicting an antelope. British South African gold coin with a face value of 1/2 pound. It has been produced since 1952.\n\nOn one side of the coin is the head of King George VI, turned to the left. Also at the top in a semicircle is the inscription GEORGIVS SEXTVS REX.\n\nOn the other side of the coin is an Antelope. Around it is the inscription SOUTH AFRICA 1952 SUID AFRICA, dotted with dots. Below is the nominal value.\n"
+        price:
+          type: integer
+          description: Coin price
+          example: 78
+        year:
+          type: integer
+          description: Year of issue of the coin
+          example: 1952
+        country:
+          type: string
+          description: Country of issue of the coin
+          example: "British South Africa"
+        metal:
+          type: string
+          description: Metal coins
+          example: "Gold"
+        quality:
+          type: string
+          description: Coin quality
+          example: "BU"
+        weight:
+          type: number
+          description: Coin weight
+          example: 6.3
+        obverseImageLink:
+          type: string
+          description: Link to image of coin obverse
+          example: "https://drive.google.com/file/d/1s6UuLRCVMBuQ7k_gyGeju1GoFcXYZ1PU/view"
+        reverseImageLink:
+          type: string
+          description: Link to image of the reverse of the coin
+          example: "https://drive.google.com/drive/u/0/folders/13_FFosOWLmNK6aEYf7qtpKjPn751z4Sf"
+    CoinSchemaResponse:
+      allOf:
+        - $ref: '#/components/schemas/CoinSchema'
+        - type: object
+          properties:
+            _id:
+              type: string
+              description: ID of the coin
+              example: "65edb8288bfe7254bc6c1484"
+            createdAt:
+              type: string
+              format: date-time
+              description: Date and time when the coin was created
+              example: "2024-03-10T13:39:52.751Z"
+            updatedAt:
+              type: string
+              format: date-time
+              description: Date and time when the coin was last updated
+              example: "2024-03-10T13:39:52.751Z"
+            __v:
+              type: integer
+              description: Version of the coin document
+              example: 0
+paths:
+  /api/coin:
+    get:
+      summary: Get categories of coins and photos for them.
+      tags: 
+        - Coin
+      responses:
+        '200':
+          description: All categories and their photos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    obverseImageLink:
+                      type: string
+                      format: uri
+                      example: "https://drive.google.com/file/d/1s6UuLRCVMBuQ7k_gyGeju1GoFcXYZ1PU/view"
+                    name:
+                      type: string
+                      example: "Bullion coins"
+    post:
+      summary: Add a coin
+      tags:
+        - Coin
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoinSchema'
+      responses:
+        '200':
+          description: Successfully added a new coin.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoinSchemaResponse'
+  /api/coin/list:
+    get:
+      summary: Get all coins based on filter
+      tags: 
+        - Coin
+      parameters:
+        - in: query
+          name: offset
+          description: Number of coins for passes in pagination
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - in: query
+          name: limit
+          description: Limitation on the number of coins returned
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - in: query
+          name: category
+          description: Coin category
+          schema:
+            type: string
+        - in: query
+          name: search
+          description: Search for matches in the name, short and detailed description of coins.
+          schema:
+            type: string
+        - in: query
+          name: advancedFilter
+          description: Filters for advanced search
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  minPrice:
+                    type: number
+                    format: float
+                    example: 30
+                  maxPrice:
+                    type: number
+                    format: float
+                    example: 80
+                  minYear:
+                    type: number
+                    format: float
+                    example: 1900
+                  maxYear:
+                    type: number
+                    format: float
+                    example: 1999
+                  country:
+                    type: string
+                    example: Canada
+                  metal:
+                    type: string
+                    example: Nickel
+                  quality:
+                    type: string
+                    example: BU
+      responses:
+        '200':
+          description: An array containing all coins or all matches based on a filter.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coins:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CoinSchemaResponse'
+                  count:
+                    type: integer
+                    example: 1
+  /api/coin/{id}:
+    get:
+      summary: Get a coin data by ID
+      tags:
+        - Coin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the coin to get data
+          schema:
+            type: string
+      responses:
+        '200':
+          description: All categories and their photos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoinSchemaResponse'
+    put:
+      summary: Update a coin by ID
+      tags:
+        - Coin
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the coin to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoinSchema'
+      responses:
+        '200':
+          description: Successfully updated coin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoinSchemaResponse'
+    delete:
+      summary: Delete a coin by ID
+      tags:
+        - Coin
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the coin to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted coin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoinSchemaResponse'
+  /api/auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Authentication
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  description: User's login
+                  example: john_doe
+                password:
+                  type: string
+                  description: User's password
+                  example: mypassword123
+                name:
+                  type: string
+                  description: User's name
+                  example: John
+      responses:
+        '200':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User successfully registered
+                  success:
+                    type: boolean
+                    example: true
+  /api/auth/login:
+    post:
+      summary: Log in a user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  description: User's login
+                  example: john@example.com
+                password:
+                  type: string
+                  description: User's password
+                  example: mypassword123
+      responses:
+        '200':
+          description: User successfully logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  auth:
+                    type: boolean
+                    example: true
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjEzNzRhMTY1ZTZhNzI0NDI1YmM2YzAxIiwiaWF0IjoxNjQzNDI5MDAzLCJleHAiOjE2NDM0MzI2MDN9.uWYUat84R6W0RyJZNpKQQ-tBo1sjZ9te_O1_7I3SwYc

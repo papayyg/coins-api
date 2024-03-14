@@ -22,12 +22,7 @@ const login = async (req, res) => {
     }
 };
 
-const profile = (req, res) => {
-    res.json({success: true, ...req.user});
-};
-
 module.exports = {
 	register,
-	login,
-	profile
+	login
 }
