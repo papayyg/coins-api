@@ -31,6 +31,7 @@ The API documentation is available at `/api-docs`, where you can find descriptio
 Create a `.env` file and specify the following variables:
 - `databaseURL`: URL for the database connection.
 - `secretKey`: Secret key for JWT token generation.
+- `PORT`: Port number for the server (default: 3000).
 
 ## Development Mode
 You can run the project in development mode using `npm run dev`.

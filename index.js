@@ -3,7 +3,7 @@ const config = require("./config/config");
 const swaggerUi = require("swagger-ui-express");
 const YAML = require('yamljs');
 
-const PORT = config.PORT || 3000;
+const PORT = config.PORT;
 
 const openapiSpecification = YAML.load('./swagger.yaml');
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
