@@ -22,7 +22,12 @@ const login = async (req, res) => {
     }
 };
 
+const verifyToken = (req, res) => {
+    res.status(200).json({ message: "Authorized", success: true });
+};
+
 module.exports = {
 	register,
-	login
+	login,
+    verifyToken
 }

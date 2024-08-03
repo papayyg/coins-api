@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/', coinController.getCategories);
 router.get('/list', coinController.getCoinsByFilter);
+router.get('/filter', coinController.getFilterOptions);
 router.get('/:id', coinController.getCoin);
 router.post('/', authMiddleware.authenticateToken, coinController.addCoin);
 router.put('/:id', authMiddleware.authenticateToken, coinController.editCoin);

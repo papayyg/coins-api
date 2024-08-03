@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-	"start": "node index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -25,13 +25,18 @@
   },
   "homepage": "https://github.com/papayyg/coins-api#readme",
   "dependencies": {
+    "axios": "^1.7.2",
+    "base64-img": "^1.0.4",
     "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.1",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.0",
+    "sharp": "^0.33.4",
     "swagger-ui-express": "^5.0.0",
     "yamljs": "^0.3.0"
   }
